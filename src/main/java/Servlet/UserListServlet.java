@@ -1,5 +1,6 @@
 package Servlet;
 
+import Service.UserHibernateService;
 import Service.UserService;
 import model.User;
 
@@ -22,7 +23,8 @@ public class UserListServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<User> list = new UserService().getAllUsers();
+        //List<User> list = new UserService().getAllUsers();
+        List<User> list = UserHibernateService.getInstance().getAll();
         req.setAttribute("userList", list);
 
         RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/UserListView.jsp");

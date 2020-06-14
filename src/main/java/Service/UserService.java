@@ -12,51 +12,22 @@ public class UserService {
     }
 
     public void addUser(User user) {
-        try {
-            new UserJdbcDAO().addUser(user);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        new UserJdbcDAO().addUser(user);
     }
 
     public User getUser (int id) {
-        User user = null;
-        try {
-            user = new UserJdbcDAO().getUser(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return user;
+        return new UserJdbcDAO().getUser(id);
     }
 
     public List<User> getAllUsers() {
-        List<User> userList = null;
-        try {
-            userList = new UserJdbcDAO().getAllUsers();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return userList;
+       return new UserJdbcDAO().getAllUsers();
     }
 
-    public boolean deleteUser(int id) {
-        boolean res = false;
-        try {
-            res = new UserJdbcDAO().deleteUser(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return res;
+    public void deleteUser(User user) {
+        new UserJdbcDAO().deleteUser(user);
     }
 
-    public boolean updateUser(User user) {
-        boolean res = false;
-
-        try {
-            res = new UserJdbcDAO().updateUser(user);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return res;
+    public void updateUser(User user) {
+         new UserJdbcDAO().updateUser(user);
     }
 }

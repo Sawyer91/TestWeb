@@ -1,6 +1,5 @@
 package Servlet;
 
-import DAO.UserDAO;
 import Service.UserService;
 import model.User;
 

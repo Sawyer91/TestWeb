@@ -1,6 +1,6 @@
 package Service;
 
-import DAO.UserDAO;
+import DAO.UserJdbcDAO;
 import model.User;
 
 import java.sql.SQLException;
@@ -13,25 +13,36 @@ public class UserService {
 
     public void addUser(User user) {
         try {
-            new UserDAO().addUser(user);
+            new UserJdbcDAO().addUser(user);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public User getUser (int id) {
-        return new UserDAO().getUser(id);
+        User user = null;
+        try {
+            user = new UserJdbcDAO().getUser(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 
     public List<User> getAllUsers() {
-        return new UserDAO().getAllUsers();
+        List<User> userList = null;
+        try {
+            userList = new UserJdbcDAO().getAllUsers();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userList;
     }
 
     public boolean deleteUser(int id) {
         boolean res = false;
         try {
-            res = new UserDAO().deleteUser(id);
+            res = new UserJdbcDAO().deleteUser(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -42,7 +53,7 @@ public class UserService {
         boolean res = false;
 
         try {
-            res = new UserDAO().updateUser(user);
+            res = new UserJdbcDAO().updateUser(user);
         } catch (SQLException e) {
             e.printStackTrace();
         }

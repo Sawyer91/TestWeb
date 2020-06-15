@@ -18,6 +18,7 @@ public class UserJdbcDAO implements UserDAO {
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setString(3, user.getCountry());
             preparedStatement.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -29,13 +30,13 @@ public class UserJdbcDAO implements UserDAO {
         try(Connection connection = DBHelper.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                String name = resultSet.getString("name");
-                String email = resultSet.getString("email");
-                String country = resultSet.getString("country");
-                user = new User(id, name, email, country);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String name = resultSet.getString("name");
+                    String email = resultSet.getString("email");
+                    String country = resultSet.getString("country");
+                    user = new User(id, name, email, country);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,14 +49,14 @@ public class UserJdbcDAO implements UserDAO {
         String sql = "SELECT * FROM users ";
         try(Connection connection = DBHelper.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                String email = resultSet.getString("email");
-                String country = resultSet.getString("country");
-                userList.add(new User(id, name, email, country));
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String name = resultSet.getString("name");
+                    String email = resultSet.getString("email");
+                    String country = resultSet.getString("country");
+                    userList.add(new User(id, name, email, country));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,6 +71,7 @@ public class UserJdbcDAO implements UserDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, user.getId());
             preparedStatement.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -85,6 +87,7 @@ public class UserJdbcDAO implements UserDAO {
             preparedStatement.setString(3, user.getCountry());
             preparedStatement.setInt(4, user.getId());
             preparedStatement.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

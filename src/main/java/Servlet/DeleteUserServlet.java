@@ -1,7 +1,7 @@
 package Servlet;
 
 
-import Service.UserHibernateService;
+
 import Service.UserService;
 import model.User;
 
@@ -18,9 +18,8 @@ public class DeleteUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-        //new UserService().deleteUser(id);
-        User user = UserHibernateService.getInstance().getUser(id);
-        UserHibernateService.getInstance().deleteUser(user);
+        User user = UserService.getInstance().getUser(id);
+        UserService.getInstance().deleteUser(user);
         resp.sendRedirect(req.getContextPath() + "/userListView");
     }
 

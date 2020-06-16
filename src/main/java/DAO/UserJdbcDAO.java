@@ -11,16 +11,24 @@ public class UserJdbcDAO implements UserDAO {
 
     public void addUser(User user) {
         String sql = "INSERT INTO users (name, email, country) VALUES (?, ?, ?)";
-
-        try (Connection connection = DBHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getEmail());
-            preparedStatement.setString(3, user.getCountry());
-            preparedStatement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Connection connection = null;
+        try {
+            connection = DBHelper.getConnection();
+            connection.setAutoCommit(false);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, user.getName());
+                preparedStatement.setString(2, user.getEmail());
+                preparedStatement.setString(3, user.getCountry());
+                preparedStatement.executeUpdate();
+                connection.commit();
+            } catch (SQLException e) {
+                connection.rollback();
+            } finally {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        } catch (Exception s) {
+            s.printStackTrace();
         }
     }
 
@@ -66,13 +74,23 @@ public class UserJdbcDAO implements UserDAO {
 
     public void deleteUser(User user) {
         String sql = "DELETE FROM users WHERE id = ?";
+        Connection connection = null;
 
-        try(Connection connection = DBHelper.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, user.getId());
-            preparedStatement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
+        try {
+            connection = DBHelper.getConnection();
+            connection.setAutoCommit(false);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setInt(1, user.getId());
+                preparedStatement.executeUpdate();
+                connection.commit();
+            } catch (SQLException e) {
+                connection.rollback();
+                e.printStackTrace();
+            } finally {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -80,15 +98,25 @@ public class UserJdbcDAO implements UserDAO {
 
     public void updateUser(User user) {
         String sql = "UPDATE users set name = ?, email = ?, country = ? WHERE id = ?";
-        try(Connection connection = DBHelper.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getEmail());
-            preparedStatement.setString(3, user.getCountry());
-            preparedStatement.setInt(4, user.getId());
-            preparedStatement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
+        Connection connection = null;
+        try {
+            connection = DBHelper.getConnection();
+            connection.setAutoCommit(false);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, user.getName());
+                preparedStatement.setString(2, user.getEmail());
+                preparedStatement.setString(3, user.getCountry());
+                preparedStatement.setInt(4, user.getId());
+                preparedStatement.executeUpdate();
+                connection.commit();
+            } catch (SQLException e) {
+                connection.rollback();
+                e.printStackTrace();
+            } finally {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

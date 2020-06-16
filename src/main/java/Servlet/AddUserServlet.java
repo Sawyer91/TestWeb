@@ -1,7 +1,6 @@
 package Servlet;
 
-import DAO.UserHibernateDAO;
-import Service.UserHibernateService;
+
 import Service.UserService;
 import model.User;
 
@@ -29,8 +28,7 @@ public class AddUserServlet extends HttpServlet {
         String country = req.getParameter("country");
 
         User user = new User(Name, email, country);
-        //new UserService().addUser(user);
-        UserHibernateService.getInstance().addUser(user);
+        UserService.getInstance().addUser(user);
         resp.sendRedirect(req.getContextPath() + "/userListView");
     }
 }

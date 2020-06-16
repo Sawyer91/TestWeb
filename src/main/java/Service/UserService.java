@@ -1,33 +1,42 @@
 package Service;
 
 import DAO.UserJdbcDAO;
+import Factory.UserDaoFactory;
 import model.User;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
+
+    private static  UserService Instance;
+
+    public static  UserService getInstance() {
+        if (Instance == null) {
+            Instance = new UserService();
+        }
+        return Instance;
+    }
 
     public UserService() {
     }
 
     public void addUser(User user) {
-        new UserJdbcDAO().addUser(user);
+        UserDaoFactory.getDAO().addUser(user);
     }
 
     public User getUser (int id) {
-        return new UserJdbcDAO().getUser(id);
+        return UserDaoFactory.getDAO().getUser(id);
     }
 
     public List<User> getAllUsers() {
-       return new UserJdbcDAO().getAllUsers();
+       return UserDaoFactory.getDAO().getAllUsers();
     }
 
     public void deleteUser(User user) {
-        new UserJdbcDAO().deleteUser(user);
+        UserDaoFactory.getDAO().deleteUser(user);
     }
 
     public void updateUser(User user) {
-         new UserJdbcDAO().updateUser(user);
+         UserDaoFactory.getDAO().updateUser(user);
     }
 }

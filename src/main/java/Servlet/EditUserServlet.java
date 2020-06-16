@@ -1,6 +1,5 @@
 package Servlet;
 
-import Service.UserHibernateService;
 import Service.UserService;
 import model.User;
 
@@ -18,8 +17,7 @@ public class EditUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-        //User user = new UserService().getUser(id);
-        User user = UserHibernateService.getInstance().getUser(id);
+        User user = UserService.getInstance().getUser(id);
         System.out.println(user.getName());
         req.setAttribute("user", user);
         RequestDispatcher dispatcher = req.getServletContext()
@@ -35,8 +33,7 @@ public class EditUserServlet extends HttpServlet {
         String country = req.getParameter("country");
 
         User user = new User(id, name, email, country);
-        //new UserService().updateUser(user);
-        UserHibernateService.getInstance().updateUser(user);
+        UserService.getInstance().updateUser(user);
         req.setAttribute("user", user);
         resp.sendRedirect(req.getContextPath() + "/userListView");
     }

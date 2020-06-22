@@ -10,8 +10,12 @@
 
 <div style="padding: 5px;">
 
-    <a href="${pageContext.request.contextPath}/userListView">User List</a>
+    <a href="${pageContext.request.contextPath}/admin/userListView">User List</a>
     |
-    <a href="${pageContext.request.contextPath}/">Add User</a>
+    <a href="${pageContext.request.contextPath}/add">Add User</a>
+    |
+    <a href="${pageContext.request.contextPath}/">Login</a>
+    |
+    <a href="${pageContext.request.contextPath}/userInfo">User Info</a>
 
 </div>

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/")
+@WebServlet("/add")
 public class AddUserServlet extends HttpServlet {
 
     @Override
@@ -24,11 +24,13 @@ public class AddUserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String Name = req.getParameter("name");
+        String password = req.getParameter("password");
         String email = req.getParameter("email");
         String country = req.getParameter("country");
+        String role = req.getParameter("role");
 
-        User user = new User(Name, email, country);
+        User user = new User(Name, password, email, country, role);
         UserService.getInstance().addUser(user);
-        resp.sendRedirect(req.getContextPath() + "/userListView");
+        resp.sendRedirect(req.getContextPath() + "/");
     }
 }

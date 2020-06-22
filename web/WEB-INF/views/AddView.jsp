@@ -20,11 +20,15 @@
 <h3>Add User</h3>
 
 
-<form method="POST" action="${pageContext.request.contextPath}/addUser">
+<form method="POST" action="${pageContext.request.contextPath}/add">
     <table border="0">
         <tr>
             <td>User Name</td>
             <td><input type="text" name="name" value= "${user.name}" /> </td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="text" name="password" value= "${user.password}" /> </td>
         </tr>
         <tr>
             <td>Email</td>
@@ -33,6 +37,10 @@
         <tr>
             <td>Country</td>
             <td><input type="text" name="country" value= "${user.country}" /> </td>
+        </tr>
+        <tr>
+            <td>Role</td>
+            <td><input type="text" name="role" value= "${user.role}" /> </td>
         </tr>
         <tr>
             <td colspan ="2">

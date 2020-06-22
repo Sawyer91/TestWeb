@@ -22,7 +22,7 @@
 
 
 <c:if test="${not empty user}">
-    <form method="POST" action="${pageContext.request.contextPath}/editUser">
+    <form method="POST" action="${pageContext.request.contextPath}/admin/editUser">
         <input type="hidden" name="id" value="${user.id}" />
         <table border="0">
             <tr>
@@ -34,12 +34,20 @@
                 <td><input type="text" name="name" value="${user.name}" /></td>
             </tr>
             <tr>
+                <td>Password</td>
+                <td><input type="text" name="password" value="${user.password}" /></td>
+            </tr>
+            <tr>
                 <td>Email</td>
                 <td><input type="text" name="email" value="${user.email}" /></td>
             </tr>
             <tr>
                 <td>country</td>
                 <td><input type="text" name="country" value="${user.country}" /></td>
+            </tr>
+            <tr>
+                <td>Role</td>
+                <td><input type="text" name="role" value="${user.role}" /></td>
             </tr>
             <tr>
                 <td colspan = "2">

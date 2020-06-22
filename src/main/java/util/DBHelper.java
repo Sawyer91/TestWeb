@@ -11,9 +11,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBHelper {
-    private static String jdbcURL = "jdbc:mysql://localhost:3306/users?serverTimezone=UTC";
-    private static String jdbcUser = "root";
-    private static String jdbcPass = "12345678";
 
     private static SessionFactory sessionFactory;
 
@@ -27,35 +24,30 @@ public class DBHelper {
     public static Connection getConnection() {
         Connection connection = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(jdbcURL, jdbcUser, jdbcPass);
+            Class.forName(PropertyReader.getDriver());
+            connection = DriverManager.getConnection(PropertyReader.getDBHost(),
+                    PropertyReader.getDBUSer(),
+                    PropertyReader.getDBUserPass());
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return connection;
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    private static Configuration getMySqlConfiguration() {
-        Configuration configuration = new Configuration();
-        configuration.addAnnotatedClass(User.class);
-
-        configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-        configuration.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/users?serverTimezone=UTC");
-        configuration.setProperty("hibernate.connection.username", "root");
-        configuration.setProperty("hibernate.connection.password", "12345678");
-        configuration.setProperty("hibernate.show_sql", "true");
-        configuration.setProperty("hibernate.hbm2ddl.auto", "update");
-        return configuration;
-    }
 
     private static SessionFactory createSessionFactory() {
-        Configuration configuration = getMySqlConfiguration();
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
-        builder.applySettings(configuration.getProperties());
-        ServiceRegistry serviceRegistry = builder.build();
-        return configuration.buildSessionFactory(serviceRegistry);
+        try {
+            Configuration configuration = new Configuration();
+            ServiceRegistry serviceRegistry
+                    = new StandardServiceRegistryBuilder()
+                    .applySettings(configuration.getProperties()).build();
+            configuration.addAnnotatedClass(User.class);
+            return configuration
+                    .buildSessionFactory(serviceRegistry);
+        }catch(Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("There is issue in hibernate util");
+        }
     }
 
 }

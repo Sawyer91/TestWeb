@@ -10,15 +10,17 @@ import java.util.List;
 public class UserJdbcDAO implements UserDAO {
 
     public void addUser(User user) {
-        String sql = "INSERT INTO users (name, email, country) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO users (name, password, email, country, role) VALUES (?, ?, ?, ?, ?)";
         Connection connection = null;
         try {
             connection = DBHelper.getConnection();
             connection.setAutoCommit(false);
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, user.getName());
-                preparedStatement.setString(2, user.getEmail());
-                preparedStatement.setString(3, user.getCountry());
+                preparedStatement.setString(2, user.getPassword());
+                preparedStatement.setString(3, user.getEmail());
+                preparedStatement.setString(4, user.getCountry());
+                preparedStatement.setString(5, user.getRole());
                 preparedStatement.executeUpdate();
                 connection.commit();
             } catch (SQLException e) {
@@ -33,7 +35,7 @@ public class UserJdbcDAO implements UserDAO {
     }
 
     public User getUser(int id) {
-        String sql = "SELECT id,name,email,country FROM users where id = ?";
+        String sql = "SELECT id,name,password,email,country,role FROM users where id = ?";
         User user = null;
         try(Connection connection = DBHelper.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -41,9 +43,11 @@ public class UserJdbcDAO implements UserDAO {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     String name = resultSet.getString("name");
+                    String password = resultSet.getString("password");
                     String email = resultSet.getString("email");
                     String country = resultSet.getString("country");
-                    user = new User(id, name, email, country);
+                    String role = resultSet.getString("role");
+                    user = new User(id, name, password, email, country, role);
                 }
             }
         } catch (SQLException e) {
@@ -61,9 +65,11 @@ public class UserJdbcDAO implements UserDAO {
                 while (resultSet.next()) {
                     int id = resultSet.getInt("id");
                     String name = resultSet.getString("name");
+                    String password = resultSet.getString("password");
                     String email = resultSet.getString("email");
                     String country = resultSet.getString("country");
-                    userList.add(new User(id, name, email, country));
+                    String role = resultSet.getString("role");
+                    userList.add(new User(id, name, password, email, country, role));
                 }
             }
         } catch (SQLException e) {
@@ -97,16 +103,18 @@ public class UserJdbcDAO implements UserDAO {
     }
 
     public void updateUser(User user) {
-        String sql = "UPDATE users set name = ?, email = ?, country = ? WHERE id = ?";
+        String sql = "UPDATE users set name = ?, password = ?, email = ?, country = ?, role = ? WHERE id = ?";
         Connection connection = null;
         try {
             connection = DBHelper.getConnection();
             connection.setAutoCommit(false);
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, user.getName());
-                preparedStatement.setString(2, user.getEmail());
-                preparedStatement.setString(3, user.getCountry());
-                preparedStatement.setInt(4, user.getId());
+                preparedStatement.setString(2, user.getPassword());
+                preparedStatement.setString(3, user.getEmail());
+                preparedStatement.setString(4, user.getCountry());
+                preparedStatement.setString(5, user.getRole());
+                preparedStatement.setInt(6, user.getId());
                 preparedStatement.executeUpdate();
                 connection.commit();
             } catch (SQLException e) {
@@ -119,5 +127,28 @@ public class UserJdbcDAO implements UserDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public User findUser(String name) {
+        String sql = "SELECT id,name,password,email,country,role FROM users where name = ?";
+        User user = null;
+        try(Connection connection = DBHelper.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, name);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String password = resultSet.getString("password");
+                    String email = resultSet.getString("email");
+                    String country = resultSet.getString("country");
+                    String role = resultSet.getString("role");
+                    user = new User(id, name, password, email, country, role);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 }

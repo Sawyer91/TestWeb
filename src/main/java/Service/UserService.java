@@ -1,8 +1,7 @@
 package Service;
 
-import DAO.UserJdbcDAO;
-import Factory.UserDaoFactory;
 import model.User;
+import util.PropertyReader;
 
 import java.util.List;
 
@@ -21,22 +20,26 @@ public class UserService {
     }
 
     public void addUser(User user) {
-        UserDaoFactory.getDAO().addUser(user);
+        PropertyReader.getDAO().addUser(user);
     }
 
     public User getUser (int id) {
-        return UserDaoFactory.getDAO().getUser(id);
+        return PropertyReader.getDAO().getUser(id);
     }
 
     public List<User> getAllUsers() {
-       return UserDaoFactory.getDAO().getAllUsers();
+       return PropertyReader.getDAO().getAllUsers();
     }
 
     public void deleteUser(User user) {
-        UserDaoFactory.getDAO().deleteUser(user);
+        PropertyReader.getDAO().deleteUser(user);
     }
 
     public void updateUser(User user) {
-         UserDaoFactory.getDAO().updateUser(user);
+        PropertyReader.getDAO().updateUser(user);
+    }
+
+    public User findUser (String name) {
+        return PropertyReader.getDAO().findUser(name);
     }
 }

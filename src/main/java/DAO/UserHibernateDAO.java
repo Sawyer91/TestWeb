@@ -42,7 +42,7 @@ public class UserHibernateDAO implements UserDAO {
     public List<User> getAllUsers() {
         List<User> userList = null;
         try (Session session = sessionFactory.openSession()) {
-            userList = session.createQuery("FROM User").list();
+            userList = session.createQuery("FROM User order by id asc").list();
         }
         return userList;
     }
@@ -73,5 +73,14 @@ public class UserHibernateDAO implements UserDAO {
                 transaction.rollback();
             }
         }
+    }
+
+    @Override
+    public User findUser(String name) {
+        User user = null;
+        try (Session session = sessionFactory.openSession()) {
+            user = (User)session.createQuery("FROM User WHERE name = '"+ name +"' ").uniqueResult();
+        }
+        return user;
     }
 }

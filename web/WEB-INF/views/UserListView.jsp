@@ -24,8 +24,10 @@
     <tr>
         <th>id</th>
         <th>Name</th>
+        <th>Password</th>
         <th>email</th>
         <th>country</th>
+        <th>role</th>
         <th>Edit</th>
         <th>Delete</th>
     </tr>
@@ -33,8 +35,10 @@
         <tr>
             <td>${user.id}</td>
             <td>${user.name}</td>
+            <td>${user.password}</td>
             <td>${user.email}</td>
             <td>${user.country}</td>
+            <td>${user.role}</td>
             <td>
                 <a href="editUser?id=${user.id}">Edit</a>
             </td>
